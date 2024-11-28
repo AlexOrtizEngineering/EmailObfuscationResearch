@@ -1,3 +1,4 @@
+import os
 import re
 import time
 import csvreader
@@ -217,7 +218,12 @@ def process(pair):
         #print(f"Error fetching {URL}: {e}\n")
         broken_urls.append(URL)
 
-infile = open("./websites.txt", "r")
+
+# Get the directory where main.py is located
+script_dir = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(script_dir, "websites.txt")
+
+infile = open(file_path, "r")
 pairs = []
 for line in infile:
     split = line.split(",")
@@ -229,117 +235,9 @@ for pair in pairs:
     process(pair)
 
 
-exit()
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Create a 2D list with the emails and their corresponding URLs
-emails_and_links = [[emails[i], working_urls[i]] for i in range(len(emails))]
-
-# URLs that didn't yield emails
-non_working_urls = list(set(URLs) - set(working_urls) - set(broken_urls))
-
-# Print out found emails and their links
-print(emails_and_links)
-print("Number of emails found: " + str(len(emails)) + "\n")
-
-# Print out classes of URLs
-print("Out of " + str(len(URLs)) + " URLs, there were:")
-print(str(len(working_urls)) + " functional URLs,")
-print(str(len(broken_urls)) + " broken URLs, and")
-print(str(len(non_working_urls)) + " non-functional URLs.\n")
-                                                                                                           
-# Print out non working URLs
-print("URLs that didn't yield emails: ")
-print(non_working_urls)
-
-# Make sure emails are correct 
-correct_emails = csvreader.toEmail()
-correct_emails += [
-    "stepfanie.aguillon@gmail.com",
-    "giuliana.a.viglione@gmail.com",
-    "e.siracusa@exeter.ac.uk",
-    "nusbaum_a@heritage.edu",
-    "jucamilo.sanchez@gmail.com",
-    "chase.ladue@gmail.com",
-    "cetruelo@syr.edu",
-    "sukrit.singh@choderalab.org",
-    "anna.bax@csulb.edu",
-    "j@nny.fyi",
-    "dbaranger@wustl.edu",
-    "brumberg@ucsb.edu",
-    "cc2564@cornell.edu",
-    "emijones@stanford.edu",
-    "ubadah@mit.edu",
-    "sarahkw2@illinois.edu",
-    "support@carl.j.pearson",
-    "tfb43@cornell.edu",
-    "bblanchard@fieldmuseum.org",
-    "oliverstringham@gmail.com",
-    "jordanharrod@nebula.tv",
-    "brandt.gaches@chalmers.se",
-    "katiemummah@gmail.com",
-    "sarahparker2296@yahoo.com",
-    "tprochnow@tamu.edu",
-    "cecilia.klauber@gmail.com",
-    "christiana.mcdonald-spicer@anu.edu.au",
-    "rosaliebruel@gmail.com",
-    "rebecca.abney@uga.edu",
-    "orestis.georgiou@gmail.com", 
-    "baez@math.ucr.edu", 
-    "kconrad@math.uconn.edu",
-    "enegrini@ucla.edu",
-    "amanda_lynch@brown.edu",
-    "dalyabaron@gmail.com",
-    "tzimmerman1@twu.edu",
-    "tjsmith@stfx.ca",
-    "sfecich@gmail.com",
-    "matous.elphick@crick.ac.uk",
-    "office.nickbostrom@gmail.com", "nick@nickbostrom.com",
-    "shoup@ucla.edu",
-    "hello@katebowler.com",
-    "it@argo-e.com",
-    "hablab@arizona.edu",
-    "info@themathguru.ca",
-    "bjfogg@stanford.edu",
-    "nathan.constantine-cooke@ed.ac.uk",
-    "hello@raymondrumpf.com", "info@raymond.rumpf.com", "info@raymondrumpf.com",
-    "jeklof@uw.edu",
-    "krogers34@gatech.edu",
-    "curtisstedge@me.com",
-    "kellirmarshall@gmail.com",
-    "amitsealami@gmail.com",
-    "oded.goldreich@weizmann.ac.il", "webmaster@wisdom.weizmann.ac.il",
-    "hedahlbergdodd@gmail.com",
-    "ajentzschortiz@gmail.com"
-]
-# Original emails list
-original_emails = emails[:]
-# Filter emails that are in the correct_emails list
-emails = [email for email in emails if email in correct_emails]
-# Find emails that were removed
-removed_emails = list(set(original_emails) - set(emails))
-# Print out findings part 2
-print("\nOut of those emails, " + str(len(emails)) + " were correctly extracted.\n")
-# Prints any incorrect emails
-if removed_emails:
-    print("These emails were incorrectly extracted.")
-    print(removed_emails)
-
-
-print(categories)
-
 # Print total runtime of program
 end_time = time.time()
 elapsed_time = end_time - start_time
 print(f"Total runtime: {elapsed_time} seconds")
+
+exit()
