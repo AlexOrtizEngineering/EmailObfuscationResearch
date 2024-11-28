@@ -6,14 +6,19 @@ import google.generativeai as genai
 
 genai.configure(api_key="my_key_here")
 model = genai.GenerativeModel("gemini-1.5-flash")
-
-CHUNK_SIZE = 2000
+chat = model.start_chat(
+    history=[
+        {"role": "user", "parts": "Hello"},
+        {"role": "model", "parts": "Great to meet you. What would you like to know?"},
+    ]
+)
 
 def split_into_chunks(text):
+    CHUNK_SIZE = 2000
     return [text[i:i + CHUNK_SIZE] for i in range(0, len(text), CHUNK_SIZE)]
 
 def get_ai_response(prompt):
-    response = model.generate_content(prompt)
+    response = chat.send_message(prompt)
     return response.text.strip()
 
 def is_valid_email(email):
@@ -23,7 +28,7 @@ def is_valid_email(email):
 def get_email(html):
     chunks = split_into_chunks(html)
     for chunk in chunks:
-        prompt = f"Please extract an email from the following HTML or return \"error\": {chunk}"
+        prompt = f"{chunk}"
         response = get_ai_response(prompt)
         if response.strip() != "error" and is_valid_email(response):
             return response.strip()
@@ -41,8 +46,8 @@ URLs = [
     "https://brett-morgan.weebly.com"
 ]
 
-# prompt = f"I am going to give you HTML that may or may not contain an email. When I enter the HTML, either return the email without quotations or return \"error.\""
-# response = get_ai_response(prompt)
+prompt = f"I am going to give you HTML that may or may not contain an email. When I enter the HTML, either return the email without quotations or return \"error.\""
+response = get_ai_response(prompt)
 
 for URL in URLs:
     try:
